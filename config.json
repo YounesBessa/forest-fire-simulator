@@ -1,0 +1,16 @@
+{
+  "dimensions": {
+    "rows": 40,
+    "cols": 60
+  },
+  "initialFire": [
+    {"x": 30, "y": 20},
+    {"x": 12, "y": 18},
+    {"x": 45, "y": 32}
+  ],
+  "probabilityOfPropagation": 0.2,
+  "frameRate": 9,
+  "resolution": 10,
+  "canvasWidth": 600,
+  "canvasHeight": 400
+}
