@@ -27,6 +27,7 @@ Les dimensions de la grille, la position des cases initialement en feu, ainsi qu
 ## Structure du code
 
 `simulation.js`: Contient la logique principale de la simulation d'incendie.
+
 `config.json`: Fichier de configuration permettant de modifier les paramètres de simulation.
 
 ## Setup
