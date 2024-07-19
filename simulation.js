@@ -29,7 +29,7 @@ function draw() {
   background(255); // Set the background color to white
 
   // Display the current state of the grid
-  for (let i = 0; i < cols; i++) { //  Iterates over the columns of the grid
+  for (let i = 0; i < cols; i++) { // Iterates over the columns of the grid
     for (let j = 0; j < rows; j++) { // Iterates over the rows of the grid
       // For each cell in the grid, calculate the pixel coordinates where the cell should be drawn on the canvas
       let x = i * resolution;
@@ -51,23 +51,31 @@ function draw() {
   // Create a new 2D array to store the next state
   let next = make2DArray(cols, rows);
 
+  // Create an array to collect the cells that will catch fire in this iteration
+  let cellsToIgnite = [];
+
   // Compute the next state based on the current state (grid)
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       if (grid[i][j] == 1) { // If the cell is on fire
         next[i][j] = 2; // Mark the cell as burnt
-        propagateFire(next, i, j); // Potentially propagate the fire to neighboring cells
+        collectFirePropagation(cellsToIgnite, i, j); // Collect the cells to propagate the fire
       } else { // If the cell is not on fire
         next[i][j] = grid[i][j]; // Copies the state of the current cell from the original grid (grid) to the corresponding cell in the next array to maintain the state of cells that are not on fire
       }
     }
   }
 
+  // Ignite the collected cells
+  for (let cell of cellsToIgnite) {
+    next[cell.x][cell.y] = 1; // Set the neighboring cell on fire
+  }
+
   // Update the grid with the next state
   grid = next;
 }
 
-function propagateFire(next, x, y) {
+function collectFirePropagation(cellsToIgnite, x, y) {
   // Propagate the fire to adjacent cells based on the probabilityOfPropagation
   for (let i = -1; i <= 1; i++) { // These values represent the relative positions of neighboring cells in the column direction
     for (let j = -1; j <= 1; j++) { // These values represent the relative positions of neighboring cells in the row direction
@@ -78,9 +86,9 @@ function propagateFire(next, x, y) {
       if (col >= 0 && col < cols && row >= 0 && row < rows) {
         // Check if the neighboring cell is not already on fire and not burnt
         // Generate a random number between 0 and 1 and compare it to the probabilityOfPropagation
-        // If the random number is smaller than the probabilityOfPropagation, set the neighboring cell on fire
+        // If the random number is smaller than the probabilityOfPropagation, collect the neighboring cell to ignite
         if (grid[col][row] == 0 && random() < probabilityOfPropagation) {
-          next[col][row] = 1; // Set the neighboring cell on fire
+          cellsToIgnite.push({x: col, y: row}); // Collect the neighboring cell to ignite
         }
       }
     }
